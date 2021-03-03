@@ -1,0 +1,22 @@
+import gmsh
+import sys
+import math
+
+gmsh.initialize()
+
+gmsh.model.add("lab1")
+
+gmsh.model.occ.addTorus(0, 0, 0, 1, .5, 1, 2*math.pi)
+gmsh.model.occ.addTorus(0, 0, 0, 1, .3, 2, 2*math.pi)
+
+gmsh.model.occ.addVolume([1, 2], -1)
+
+gmsh.model.occ.synchronize()
+
+gmsh.model.mesh.generate(3)
+gmsh.write("lab11.msh")
+
+if '-nopopup' not in sys.argv:
+    gmsh.fltk.run()
+
+gmsh.finalize()
