@@ -3,23 +3,30 @@ import math
 import sys
 
 gmsh.initialize()
+
 gmsh.model.add('lab1.2')
 
-gmsh.merge('C:/Users/Мария/Desktop/lab1/lab1.2/Ditto.stl')
-gmsh.model.mesh.createGeometry()
-gmsh.model.mesh.setCompound(2, gmsh.model.getEntities(2))
+gmsh.merge('C:/Users/Мария/Desktop/lab1/lab1.2/8.stl')
 
 angle = 40
-
 forceParametrizablePatches = False
 includeBoundary = True
-curveAngle = 180
+curveAngle = 20
 
-gmsh.model.mesh.classifySurfaces(angle * math.pi / 180., includeBoundary, forceParametrizablePatches, curveAngle * math.pi / 180.)
+gmsh.model.mesh.classifySurfaces(angle * math.pi / 180., includeBoundary,
+forceParametrizablePatches,
+curveAngle * math.pi / 180.)
+gmsh.model.mesh.createGeometry()
+gmsh.model.geo.synchronize()
 
 s = gmsh.model.getEntities(2)
 l = gmsh.model.geo.addSurfaceLoop([s[i][1] for i in range(len(s))])
-gmsh.model.geo.addVolume([l])
+n = gmsh.model.geo.addVolume([l])
+
+m = gmsh.model.addPhysicalGroup(2,[s])
+gmsh.model.mesh.setSize(gmsh.model.getEntities(0), 0.001)
+
+gmsh.model.mesh.createGeometry()
 
 gmsh.model.geo.synchronize()
 
